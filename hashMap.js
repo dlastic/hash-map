@@ -3,6 +3,7 @@ export default class HashMap {
     this.loadFactor = loadFactor;
     this.capacity = capacity;
     this.table = new Array(capacity);
+    this.size = 0;
   }
 
   hash(key) {
@@ -14,6 +15,21 @@ export default class HashMap {
     }
 
     return hashCode;
+  }
+
+  resize() {
+    const oldTable = this.table;
+    this.capacity *= 2;
+    this.table = new Array(this.capacity);
+    this.size = 0;
+
+    for (const bucket of oldTable) {
+      if (bucket) {
+        for (const [k, v] of bucket) {
+          this.set(k, v);
+        }
+      }
+    }
   }
 
   set(key, value) {
@@ -30,6 +46,10 @@ export default class HashMap {
     }
 
     this.table[index].push([key, value]);
+    this.size++;
+    if (this.size / this.capacity > this.loadFactor) {
+      this.resize();
+    }
   }
 
   get(key) {
@@ -63,6 +83,7 @@ export default class HashMap {
 
         if (k === key) {
           bucket.splice(i, 1);
+          this.size--;
           return true;
         }
       }
@@ -70,18 +91,9 @@ export default class HashMap {
     return false;
   }
 
-  length() {
-    let count = 0;
-    for (const bucket of this.table) {
-      if (bucket) {
-        count += bucket.length;
-      }
-    }
-    return count;
-  }
-
   clear() {
     this.table = new Array(this.capacity);
+    this.size = 0;
   }
 
   keys() {

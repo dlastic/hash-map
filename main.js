@@ -15,3 +15,11 @@ test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
 
+console.log(`Current capacity: ${test.capacity}`);
+console.log(`Current load factor: ${test.size / test.capacity}`);
+
+test.set("moon", "silver");
+
+console.log(`Current capacity: ${test.capacity}`);
+console.log(`Current load factor: ${test.size / test.capacity}`);
+console.log(test.table);
